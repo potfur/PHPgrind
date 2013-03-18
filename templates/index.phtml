@@ -1,0 +1,15 @@
+<?php require './templates/header.phtml'; ?>
+<section>
+	<?php if(isset($e)): ?>
+		<p class="error">
+			<?php echo $e->getMessage()?>
+		</p>
+	<?php endif ?>
+	<?php if(!isset($e)): ?>
+		<p>
+			Select a cachegrind file above<br>(looking in <code><?php echo $Config->dir ?></code> for files matching
+			<code><?php echo $Config->outputFormat?></code>)
+		</p>
+	<?php endif ?>
+</section>
+<?php require './templates/footer.phtml'; ?>

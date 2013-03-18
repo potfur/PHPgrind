@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="./css/style.css" type="text/css" media="screen">
+</head>
+<body>
+<div>
+	<header>
+		<div>
+			<h1>
+				MossGrind
+				<sup>ver. <?php echo $Config->version?></sup>
+				<sub>profiling in the browser</sub>
+			</h1>
+		</div>
+		<nav>
+			<form method="get">
+				<fieldset>
+					<input type="hidden" name="op" value="<?php echo get('op', 'trace') ?>"/>
+					<label for="fraction">Show</label>
+					<select id="fraction" name="fraction">
+						<?php for($i = 100; $i > 0; $i -= 10): ?>
+							<option value="<?php echo $i / 100 ?>"
+							        <?php if($Config->fraction == $i / 100): ?>selected="selected"<?php endif;?>><?php echo $i?>
+								%
+							</option>
+						<?php endfor;?>
+					</select>
+
+					<label for="source">of</label>
+					<select id="source" name="source">
+						<option value="0">Auto (newest)</option>
+
+						<?php foreach($files as $key => $file): ?>
+							<option
+								value="<?php echo $key ?>" <?php echo isset($trace['headers']['filename']) && $trace['headers']['filename'] == $file['filename'] ? 'selected' : null ?>><?php echo str_replace(array('%i', '%f', '%s', '%m'), array($file['invokeUrl'], $file['filename'], $file['filesize'], $file['mtime']), $Config->listFormat); ?></option>
+						<?php endforeach;?>
+					</select>
+
+					<input type="checkbox" name="hideInternals"
+					       value="1" <?php echo ($Config->hideInternals == 1) ? 'checked' : ''?> id="hideInternals">
+					<label for="hideInternals">Hide PHP functions</label>
+
+					<input type="submit" value="update">
+				</fieldset>
+			</form>
+		</nav>
+	</header>

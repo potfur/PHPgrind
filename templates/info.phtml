@@ -1,0 +1,28 @@
+<div>
+	<h2 id="invoke_url"><?php echo $trace['headers']['cmd']?></h2>
+
+	<p>
+		<?php echo $trace['headers']['filename']?>
+		@ <?php echo date('Y-m-d H:i:s', $trace['headers']['mtime']) ?><br/>
+		<strong><?php echo count($trace['functions'])?></strong> different functions called in
+		<strong><?php echo round($trace['headers']['summary'] / 1000) ?></strong> milliseconds<br/>
+	</p>
+</div>
+
+<ul>
+	<?php if(get('op') !== 'trace'): ?>
+	<li>
+		<a href="?op=trace&fraction=<?php echo get('fraction')?>&source=<?php echo get('source')?>&hideInternals=<?php echo get('hideInternals')?>" class="graph">Show Trace table</a>
+	</li>
+	<?php endif; ?>
+	<?php if(get('op') !== 'treemap'): ?>
+	<li>
+		<a href="?op=treemap&fraction=<?php echo get('fraction')?>&source=<?php echo get('source')?>&hideInternals=<?php echo get('hideInternals')?>" class="graph">Show Treemap Graph</a>
+	</li>
+	<?php endif; ?>
+	<?php if(get('op') !== 'graph'): ?>
+	<li>
+		<a href="?op=graph&fraction=<?php echo get('fraction')?>&source=<?php echo get('source')?>&hideInternals=<?php echo get('hideInternals')?>" class="graph">Show Call Graph</a>
+	</li>
+	<?php endif; ?>
+</ul>

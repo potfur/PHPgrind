@@ -1,0 +1,108 @@
+html,
+body { height: 100%; margin: 0; font: normal small/1.75em sans-serif; color: #666; background: #f5f5f5; }
+
+body > div { position: relative; min-height: 100%; }
+
+a, a:visited { color: #666; text-decoration: none; border-bottom: 0.1em dotted; }
+a:hover { color: #000; border-bottom-style: solid; }
+
+h1,
+h2 { position: relative; margin: 1em 0; font-family: serif; font-weight: bold; line-height: 1.75em; text-shadow: 0.1em 0.1em 0.1em #fff; }
+h1 { margin-top: 0; }
+h1 sup { position: absolute; top: -0.25em; left: 10em; font-size: 0.5em; color: #e65533; }
+h1 sub { position: absolute; bottom: -0.25em; left: 5em; font-weight: normal; font-style: italic; }
+
+header { position: relative; height: 6em; background: #fff; border-bottom: 0.2em solid #aef; }
+header > div { position: absolute; top: 1em; left: 2em; width: 25em; }
+header > nav { position: absolute; top: 1.5em; right: 2em; }
+
+fieldset { border: none; }
+
+section { position: relative; padding: 1em 1em 5em; }
+section > div h2 { margin: 0; padding: 0.25em 0; line-height: 1.25em; }
+section > div p { margin: 0; padding: 0.25em 0; line-height: 1.25em; }
+
+section ul:nth-child(2) { position: absolute; top: 0; right: 1em; }
+
+section div:nth-child(3) { position: absolute; display: block; top: 8em; right: 1em; width: 30em; height: 1.25em; border: 0.1em solid #999; border-radius: 2em; box-shadow: 0.1em 0.1em 0.1em #fff; overflow: hidden; }
+section div:nth-child(3) span { position: relative; display: block; float: left; height: 3em; }
+section div:nth-child(3) span.class { background: #bdea74; background-image: -moz-linear-gradient(center top, #bdea74 0%, #9bc852 100%); }
+section div:nth-child(3) span.require { background: #eae874; background-image: -moz-linear-gradient(center top, #eae874 0%, #c8c652 100%); }
+section div:nth-child(3) span.procedural { background: #fa603d; background-image: -moz-linear-gradient(center top, #fa603d 0%, #d8401b 100%); }
+section div:nth-child(3) span.internal { background: #67c2ef; background-image: -moz-linear-gradient(center top, #67c2ef 0%, #45a0cd 100%); }
+section div:nth-child(3) span:before { content: '.'; position: absolute; top: 0; left: -0.1em; height: 3em; width: 0.1em; color: transparent; background: rgba(0, 0, 0, 0.25); }
+
+section > p { width: 25%; margin: 1em auto; padding: 0.4em 0.2em; }
+section > p.error { color: #fff; background: #d51; }
+
+section form { margin: 2em 0 0; }
+
+table { width: 100%; margin: 1em 0 2em; border-collapse: collapse; border-spacing: 0; }
+
+table table { display: none; margin: 0.5em 0; }
+table tr.details table { display: table; margin: 0.5em 0; }
+
+table th,
+table td { padding: 0.25em; line-height: 1.25em; text-align: left; vertical-align: top; border-top: 0.1em solid #ddd; }
+
+table th { font-weight: bold; background-image: -moz-linear-gradient(center top, #fff 0%, #eee 100%); text-shadow: 0.1em 0.1em 0.1em #fff; }
+
+table thead:first-child tr:first-child th,
+table thead:first-child tr:first-child td { border-top: 0; }
+
+table th:nth-child(n+3) { width: 2em; }
+table th:nth-child(n+4) { width: 15em; }
+
+table table th:nth-child(n+2) { width: 15em; }
+table table th:nth-child(n+4) { width: 2em; }
+
+table td:nth-child(n+3) a,
+table table td:nth-child(n+4) a { position: relative; display: block; width: 1em; height: 0.70em; font-size: 1em; border-top: 0.1em solid #000; border-bottom: 0.1em solid #000; }
+table td:nth-child(n+3) a:before,
+table table td:nth-child(n+4) a:before { content: '.'; position: absolute; display: block; top: -0.25em; width: 0.75em; height: 0.4em; color: transparent; border-bottom: 0.1em solid #000; }
+table td:nth-child(n+3) a:after,
+table table td:nth-child(n+4) a:after { content: '.'; position: absolute; display: block; top: 0.45em; width: 1.25em; height: 0.4em; color: transparent; border-top: 0.1em solid #000; }
+
+table td:nth-child(n+3) a:hover,
+table table td:nth-child(n+4) a:hover,
+table td:nth-child(n+3) a:hover:before,
+table table td:nth-child(n+4) a:hover:before,
+table td:nth-child(n+3) a:hover:after,
+table table td:nth-child(n+4) a:hover:after { border-color: #4ac; }
+
+
+table td:nth-child(n+4),
+table table td:nth-child(n+2) { text-align: right; }
+
+table td:first-child { width: 2em; text-align: center; }
+table table td:first-child { width: inherit; text-align: left; }
+
+table { border: 1px solid #ddd; border-collapse: separate; border-left: 0; border-radius: 0.4em; }
+table > thead > tr:first-child th:first-child { border-radius: 0.5em 0 0 0; }
+table > thead > tr:first-child th:last-child { border-radius: 0 0.5em 0 0; }
+table > tbody > tr:last-child td:first-child { border-radius: 0 0 0 0.5em; }
+table > tbody > tr:last-child td:last-child { border-radius: 0 0 0.5em 0; }
+
+table th,
+table td { border-left: 1px solid #ddd; }
+
+table tr td { background-color: #ffffff; }
+table tr:nth-child(2n) td { background: #f9f9f9; }
+
+span.type { display: inline-block; width: 1em; height: 1em; border: 0.1em solid #777; border-radius: 1em; box-shadow: 0.1em 0.1em 0.1em #aaa; }
+span.class { background: #bdea74; }
+span.require { background: #eae874; }
+span.procedural { background: #fa603d; }
+span.internal { background: #67c2ef; }
+
+div#treemap { position: absolute; top: 14em; right: 1em; bottom: 5em; left: 1em; background: #fff; border: 1px solid #666; border-radius: 0.5em; overflow: hidden; }
+div#treemap a { position: absolute; line-height: 1em; border-top: 1px solid rgba(0, 0, 0, 0.1); border-left: 1px solid rgba(0, 0, 0, 0.1); overflow: hidden; }
+div#treemap a span, div#treemap a strong { display: block; }
+
+div#graph { position: absolute; top: 14em; right: 1em; bottom: 5em; left: 1em; background: #fff; border: 1px solid #666; border-radius: 0.5em; overflow: hidden; }
+div#graph .node { stroke: #fff; stroke-width: 1.5px; }
+div#graph .link { stroke: #999; stroke-opacity: .6; }
+
+
+
+footer { position: absolute; bottom: 0; left: 0; width: 100%; padding: 0; line-height: 2em; background: #fff; border-top: 0.2em solid #aef; }

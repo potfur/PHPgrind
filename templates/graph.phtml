@@ -1,0 +1,99 @@
+<?php require './templates/header.phtml'; ?>
+<script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="./js/d3.v3.min.js"></script>
+<script type="text/javascript">
+	var graph = <?php echo $json ?>;
+
+	$(document).ready(function() {
+		var container =$('div#graph');
+		var width = container.width(),
+			height = container.height();
+
+		var color = function(group) {
+			switch(group) {
+				case 'class': return '#BDEA74';
+				case 'require': return '#EAE874';
+				case 'procedural': return '#FA603D';
+				case 'internal': return '#67C2EF';
+			}
+
+			return '#999999';
+		};
+
+		var force = d3.layout.force()
+			.charge(-120)
+			.linkDistance(30)
+			.size([width, height]);
+
+		var svg = d3.select("div#graph").append("svg")
+			.attr("width", width)
+			.attr("height", height)
+			.append("g")
+			.call(d3.behavior.zoom().scaleExtent([0.5, 8]).on("zoom", zoom))
+			.append("g");
+
+		force
+			.nodes(graph.nodes)
+			.links(graph.links)
+			.start();
+
+		var link = svg.selectAll(".link")
+			.data(graph.links)
+			.enter().append("line")
+			.attr("class", "link")
+			.style("stroke-width", function(d) {
+				return Math.sqrt(d.value);
+			});
+
+		var node = svg.selectAll(".node")
+			.data(graph.nodes)
+			.enter().append("circle")
+			.attr("class", "node")
+			.attr("r", function(d) {
+				return d.r;
+			})
+			.style("fill", function(d) {
+				return color(d.group);
+			})
+			.call(force.drag);
+
+		node.append("title")
+			.text(function(d) {
+				return d.name;
+			});
+
+		force.on("tick", function() {
+			link.attr("x1", function(d) {
+				return d.source.x;
+			})
+				.attr("y1", function(d) {
+					return d.source.y;
+				})
+				.attr("x2", function(d) {
+					return d.target.x;
+				})
+				.attr("y2", function(d) {
+					return d.target.y;
+				});
+
+			node.attr("cx", function(d) {
+				return d.x;
+			})
+				.attr("cy", function(d) {
+					return d.y;
+				});
+		});
+
+		function zoom() {
+			svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+		}
+
+	});
+</script>
+
+<section>
+	<?php require './templates/info.phtml'; ?>
+</section>
+
+<div id="graph"></div>
+<?php require './templates/footer.phtml'; ?>
