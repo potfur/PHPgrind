@@ -1,19 +1,28 @@
 <?php require './templates/header.phtml'; ?>
-<section>
-	<table border="0">
-		<thead>
-		<tr>
-			<th colspan="2"><?php echo get('filename')?></th>
-		</tr>
-		</thead>
-		<tbody>
-		<?php for($i = 0, $c = count($source); $i < $c; $i++): ?>
-			<tr>
-				<td id="<?php echo $i + 1 ?>"><?php echo $i + 1 ?></td>
-				<td><?php echo empty($source[$i]) ? '&nbsp;' : $source[$i]; ?></td>
-			</tr>
-		<?php endfor;?>
-		</tbody>
-	</table>
-</section>
+    <section class="file">
+        <div>
+            <h2><?php echo get('filename') ?></h2>
+        </div>
+
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <code>
+                    <?php for ($i = 1; $i <= $count; $i++): ?>
+                        <span id="<?php echo $i ?>" class="line"><?php echo $i ?><br/></span>
+                    <?php endfor; ?>
+                    </code>
+                </td>
+                <td><?php echo $source ?></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
 <?php require './templates/footer.phtml'; ?>

@@ -7,8 +7,8 @@
 	<?php endif ?>
 	<?php if(!isset($e)): ?>
 		<p>
-			Select a cachegrind file above<br>(looking in <code><?php echo $Config->dir ?></code> for files matching
-			<code><?php echo $Config->outputFormat?></code>)
+			Select a cachegrind file above<br>(looking in <code><?php echo xdebugOutputDir() ?></code> for files matching
+			<code><?php echo xdebugOutputFormat()?></code>)
 		</p>
 	<?php endif ?>
 </section>

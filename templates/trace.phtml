@@ -1,133 +1,118 @@
 <?php require './templates/header.phtml'; ?>
-<script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$('table a.file, a.graph').attr('target', '_blank');
+    <section class="trace">
+       <?php require './templates/info.phtml'; ?>
 
-		$('table a.details').on('click', function(evt) {
-			evt.preventDefault();
+        <form>
+            <fieldset>
+                <label for="filter">Filter:</label>
+                <input type="text" name="filter" id="filter"> (regex too)
+            </fieldset>
+        </form>
 
-			var tr = $(this).closest('tr');
-			if(!tr.find('table').length) {
-				return;
-			}
+        <table>
+            <thead>
+            <tr>
+                <th></th>
+                <th><span>Function</span></th>
+                <th></th>
+                <th><span>Invocation Count</span></th>
+                <th><span>Total Self Cost [%]</span></th>
+                <th><span>Total Inclusive Cost [%]</span></th>
+            </tr>
+            </thead>
+            <tbody>
 
-			tr.hasClass('details') ? tr.removeClass('details') : tr.addClass('details');
-		});
+            <?php foreach ($nodes as $func => $node): ?>
+                <tr>
+                    <td>
+                        <span title="<?php echo $node['type'] ?>" class="type <?php echo $node['type'] ?>"></span>
+                    </td>
+                    <td>
+                        <a href="#<?php echo $node['nr'] ?>" class="details"><?php echo $func ?></a>
 
-		$("input[name=filter]").keyup(function() {
-			var reg = new RegExp($(this).val(), 'i');
-			var row;
-			$('section > table').children('tbody').children('tr').each(function() {
-				row = $(this);
-				if(row.find('td:eq(1) a').text().match(reg))
-					row.css('display', 'table-row');
-				else
-					row.css('display', 'none');
-			});
-		});
-	})
-</script>
+                        <div id="<?php echo $node['nr'] ?>">
+                            <?php if (!empty($node['subCall'])): ?>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Calls</th>
+                                        <th>Count</th>
+                                        <th>Total call cost [%]</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach ($node['subCall'] as $sFunc => $sNode): ?>
+                                        <tr>
+                                            <td><?php echo $sFunc ?></td>
+                                            <td><?php echo $sNode['callCount'] ?></td>
+                                            <td><?php echo $sNode['summedCallCost'] ?></td>
+                                            <td>
+                                                <a href="?op=file&amp;filename=<?php echo $sNode['filename'] ?>#<?php echo $sNode['line'] ?>" class="file"></a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            <?php endif; ?>
 
-<section>
-	<?php require './templates/info.phtml'; ?>
+                            <?php if (!empty($node['calledFrom'])): ?>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Called from</th>
+                                        <th>Count</th>
+                                        <th>Total call cost [%]</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <?php foreach ($node['calledFrom'] as $sFunc => $sNode): ?>
+                                        <tr>
+                                            <td><?php echo $sFunc ?></td>
+                                            <td><?php echo $sNode['callCount'] ?></td>
+                                            <td><?php echo $sNode['summedCallCost'] ?></td>
+                                            <td>
+                                                <a href="?op=file&amp;filename=<?php echo $sNode['filename'] ?>#<?php echo $sNode['line'] ?>" class="file"></a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+                            <?php endif; ?>
+                        </div>
+                    </td>
+                    <td>
+                        <?php if ($node['type'] !== 'internal') { ?>
+                            <a href="?op=file&amp;filename=<?php echo $node['filename'] ?>#<?php echo $node['line'] ?>" class="file"></a>
+                        <?php } ?>
+                    </td>
+                    <td><?php echo $node['invocationCount'] ?></td>
+                    <td><?php echo $node['totalSelfCost'] ?></td>
+                    <td><?php echo $node['totalInclusiveCost'] ?></td>
+                </tr>
+            <?php endforeach; ?>
 
-	<div>
-		<?php foreach($trace['headers']['types'] as $type => $value): ?>
-			<span title="<?php echo $type ?>" class="<?php echo $type ?>"
-			      style="width: <?php echo $value ?>%"></span>
-		<?php endforeach; ?>
-	</div>
+            </tbody>
+        </table>
+    </section>
 
-	<form>
-		<fieldset>
-			<label for="filter">Filter:</label>
-			<input type="text" name="filter" id="filter"> (regex too)
-		</fieldset>
-	</form>
+    <script type="text/javascript">
+        function toggle(node) {
+            var i, l, nodes = node.parentNode.querySelectorAll('table');
+            for(i = 0, l = nodes.length; i < l; i++) {
+                nodes[i].style.display = nodes[i].style.display == 'none' ? 'table' : 'none';
+            }
+        }
 
-	<table>
-		<thead>
-		<tr>
-			<th></th>
-			<th><span>Function</span></th>
-			<th></th>
-			<th><span>Invocation Count</span></th>
-			<th><span>Total Self Cost [%]</span></th>
-			<th><span>Total Inclusive Cost [%]</span></th>
-		</tr>
-		</thead>
-		<tbody>
+        var i, l, nodes = document.querySelectorAll('table a.details');
+        for(i = 0, l = nodes.length; i < l; i++) {
+            toggle(nodes[i]);
+            nodes[i].addEventListener('click', function(evt) {
+                evt.preventDefault();
+                toggle(evt.target);
+            });
+        }
+    </script>
 
-		<?php foreach($trace['functions'] as $func => $node): ?>
-			<tr>
-				<td>
-					<span title="<?php echo $node['type'] ?>" class="type <?php echo $node['type'] ?>"></span>
-				</td>
-				<td>
-					<a href="#" class="details"><?php echo $func ?></a>
-
-					<div id="<?php echo $node['nr'] ?>">
-						<?php if(!empty($node['subCall'])): ?>
-							<table>
-								<thead>
-								<tr>
-									<th>Calls</th>
-									<th>Count</th>
-									<th>Total call cost [%]</th>
-									<th></th>
-								</tr>
-								</thead>
-								<tbody>
-								<?php foreach($node['subCall'] as $sFunc => $sNode): ?>
-									<tr>
-										<td><?php echo $sFunc?></td>
-										<td><?php echo $sNode['callCount']?></td>
-										<td><?php echo $sNode['summedCallCost']?></td>
-										<td>
-											<a href="?op=file&amp;filename=<?php echo $sNode['filename'] ?>#<?php echo $sNode['line'] ?>"
-											   class="file"></a></td>
-									</tr>
-								<?php endforeach;?>
-								</tbody>
-							</table>
-						<?php endif; ?>
-
-						<?php if(!empty($node['calledFrom'])): ?>
-							<table>
-								<thead>
-								<tr>
-									<th>Called from</th>
-									<th>Count</th>
-									<th>Total call cost [%]</th>
-									<th></th>
-								</tr>
-								</thead>
-								<tbody>
-								<?php foreach($node['calledFrom'] as $sFunc => $sNode): ?>
-									<tr>
-										<td><?php echo $sFunc?></td>
-										<td><?php echo $sNode['callCount']?></td>
-										<td><?php echo $sNode['summedCallCost']?></td>
-										<td>
-											<a href="?op=file&amp;filename=<?php echo $sNode['filename'] ?>#<?php echo $sNode['line'] ?>"
-											   class="file"></a></td>
-									</tr>
-								<?php endforeach;?>
-								</tbody>
-							</table>
-						<?php endif; ?>
-					</div>
-				</td>
-				<td><a href="?op=file&amp;filename=<?php echo $node['filename'] ?>#<?php echo $node['line'] ?>"
-				       class="file"></a></td>
-				<td><?php echo $node['invocationCount'] ?></td>
-				<td><?php echo $node['totalSelfCost'] ?></td>
-				<td><?php echo $node['totalInclusiveCost'] ?></td>
-			</tr>
-		<?php endforeach;?>
-
-		</tbody>
-	</table>
-</section>
 <?php require './templates/footer.phtml'; ?>
